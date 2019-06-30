@@ -1,0 +1,12 @@
+##### clear all records ####
+truncate members.account_inf;
+truncate members.app_inf;
+truncate members.communication_inf;
+truncate members.consumption_inf;
+truncate members.job_inf;
+truncate members.loan_inf;
+delete FROM members.other_communication_inf;
+delete FROM members.personal_inf;
+
+#### check all tables record ###
+select (SELECT COUNT(*) FROM members.personal_inf) AS personal_inf, ( SELECT COUNT(*) FROM members.communication_inf ) AS communication_inf, ( SELECT COUNT(*) FROM members.account_inf ) AS account_inf, ( SELECT COUNT(*) FROM members.app_inf ) AS app_inf, ( SELECT COUNT(*) FROM members.consumption_inf ) AS consumption_inf, ( SELECT COUNT(*) FROM members.job_inf ) AS job_inf, ( SELECT COUNT(*) FROM members.loan_inf ) AS loan_inf, ( SELECT COUNT(*) FROM members.other_communication_inf ) AS other_communication_inf, CURRENT_TIMESTAMP() AS Time;

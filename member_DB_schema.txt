@@ -1,0 +1,164 @@
+#https://github.com/yctsai16026/dataGenerator
+
+
+CREATE DATABASE `members`;
+
+CREATE TABLE `members`.`personal_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(48) NOT NULL,
+  `ch_name` varchar(128) CHARACTER SET utf8 NOT NULL,
+  `eng_name` varchar(128) DEFAULT NULL,
+  `gender` varchar(12) NOT NULL,
+  `national_id` varchar(128) NOT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`uuid`),
+  UNIQUE KEY `pid_UNIQUE` (`id`),
+  UNIQUE KEY `uuid_UNIQUE` (`uuid`),
+  UNIQUE KEY `national_id_UNIQUE` (`national_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`account_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_aid` int(11) NOT NULL,
+  `deposit` int(20) NOT NULL,
+  `transfer_remark` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
+  `atm_times` int(10) NOT NULL,
+  `web_bank_login_times` int(10) NOT NULL,
+  `ip` varchar(15) DEFAULT NULL,
+  `login_time` varchar(45) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `aid_UNIQUE` (`id`),
+  UNIQUE KEY `basic_aid_UNIQUE` (`basic_aid`),
+  KEY `basic_aid_idx` (`basic_aid`),
+  CONSTRAINT `basic_aid` FOREIGN KEY (`basic_aid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`other_communication_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_ocid` int(11) NOT NULL,
+  `uuid` varchar(48) NOT NULL,
+  `adid` varchar(48) NOT NULL,
+  `region` varchar(45) DEFAULT NULL,
+  `city` varchar(45) DEFAULT NULL,
+  `os` varchar(45) DEFAULT NULL,
+  `os_version` varchar(45) DEFAULT NULL,
+  `model` varchar(45) DEFAULT NULL,
+  `manufacturer` varchar(45) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`,`uuid`,`adid`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `uuid_UNIQUE` (`uuid`),
+  UNIQUE KEY `adid_UNIQUE` (`adid`),
+  UNIQUE KEY `basic_ocid_UNIQUE` (`basic_ocid`),
+  KEY `basic_ocid_idx` (`basic_ocid`),
+  CONSTRAINT `basic_ocid` FOREIGN KEY (`basic_ocid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`app_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_appid` int(11) NOT NULL,
+  `subscript_status` tinyint(1) unsigned zerofill NOT NULL,
+  `login_status` tinyint(1) unsigned zerofill NOT NULL,
+  `language` varchar(12) DEFAULT NULL,
+  `app_install_time` varchar(45) DEFAULT NULL,
+  `query_num_country_TW` varchar(45) DEFAULT NULL,
+  `query_type` varchar(45) DEFAULT NULL,
+  `is_contact` tinyint(1) unsigned zerofill NOT NULL,
+  `biz_category` varchar(45) DEFAULT NULL,
+  `is_spam` tinyint(1) unsigned zerofill NOT NULL,
+  `spam_category` varchar(45) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id_UNIQUE` (`id`),
+  UNIQUE KEY `basic_appid_UNIQUE` (`basic_appid`),
+  KEY `basic_appid_idx` (`basic_appid`),
+  CONSTRAINT `basic_appid` FOREIGN KEY (`basic_appid`) REFERENCES `other_communication_inf` (`basic_ocid`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`communication_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_cid` int(11) NOT NULL,
+  `mobile` varchar(24) NOT NULL,
+  `telephone` varchar(24) DEFAULT NULL,
+  `email` varchar(128) DEFAULT NULL,
+  `address` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `geographic_location_level` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cid_UNIQUE` (`id`),
+  UNIQUE KEY `mobile_UNIQUE` (`mobile`),
+  UNIQUE KEY `basic_cid_UNIQUE` (`basic_cid`),
+  UNIQUE KEY `telephone_UNIQUE` (`telephone`),
+  UNIQUE KEY `email_UNIQUE` (`email`),
+  KEY `basic_cid_idx` (`basic_cid`),
+  CONSTRAINT `basic_cid` FOREIGN KEY (`basic_cid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`consumption_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_coid` int(11) NOT NULL,
+  `shop_name` varchar(128) DEFAULT NULL,
+  `mcc_code` int(11) DEFAULT NULL,
+  `mcc_type` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `consumption` varchar(70) CHARACTER SET utf8 NOT NULL,
+  `credit_transaction_ratio` float unsigned NOT NULL,
+  `dep_transaction_ratio` float unsigned NOT NULL,
+  `latitude_and_longitude` varchar(128) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `coid_UNIQUE` (`id`),
+  UNIQUE KEY `basic_coid_UNIQUE` (`basic_coid`),
+  KEY `basic_coid_idx` (`basic_coid`),
+  CONSTRAINT `basic_coid` FOREIGN KEY (`basic_coid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`job_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_jid` int(11) NOT NULL,
+  `job_title` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `occupation` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `customer_seniority` varchar(45) DEFAULT NULL,
+  `income` int(11) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `jid_UNIQUE` (`id`),
+  UNIQUE KEY `basic_jid_UNIQUE` (`basic_jid`),
+  KEY `basic_jid_idx` (`basic_jid`),
+  CONSTRAINT `basic_jid` FOREIGN KEY (`basic_jid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `members`.`loan_inf` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `basic_lid` int(11) NOT NULL,
+  `number_of_other_credit_cards` int(10) unsigned NOT NULL,
+  `credit_level` int(10) unsigned NOT NULL,
+  `building_type` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `building_footage` varchar(45) DEFAULT NULL,
+  `audience_category` int(11) NOT NULL,
+  `sources` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `bad_remark` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
+  `payment_delay_date` varchar(45) DEFAULT NULL,
+  `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `lid_UNIQUE` (`id`),
+  UNIQUE KEY `basic_lid_UNIQUE` (`basic_lid`),
+  KEY `basic_lid_idx` (`basic_lid`),
+  CONSTRAINT `basic_lid` FOREIGN KEY (`basic_lid`) REFERENCES `personal_inf` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+################################ export data #####################################################
+#bank data
+SELECT pi.ch_name, pi.eng_name, pi.national_id,comi.mobile,comi.telephone,comi.email,comi.address,li.building_type,ji.job_title,ai.transfer_remark,coni.shop_name,coni.consumption,ai.deposit,ji.income,ai.atm_times,ai.web_bank_login_times,ai.login_time,comi.geographic_location_level,li.credit_level,li.audience_category,li.sources,li.bad_remark,li.payment_delay_date,coni.mcc_code,coni.mcc_type,li.number_of_other_credit_cards,li.building_footage,ji.customer_seniority,coni.credit_transaction_ratio,coni.dep_transaction_ratio,ai.ip,coni.latitude_and_longitude, pi.id , ai.basic_aid FROM members.personal_inf pi ,members.account_inf ai, members.communication_inf comi, members.consumption_inf coni, members.job_inf ji, members.loan_inf li where ai.basic_aid = pi.id and comi.basic_cid=pi.id and coni.basic_coid=pi.id and li.basic_lid=pi.id and ji.basic_jid=pi.id and pi.id >= 1 and pi.id <= 8000000 into outfile '/var/lib/mysql-files/bankSimData.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+#app data
+select ocmi.uuid, ocmi.adid, comi.mobile, ocmi.region, ocmi.city, ocmi.os, ocmi.os_version, api.subscript_status, ocmi.manufacturer, ocmi.model, api.language, api.login_status, api.app_install_time, api.query_num_country_TW, api.query_type, api.is_contact, api.biz_category, api.is_spam, api.spam_category  from members.personal_inf pi, members.other_communication_inf ocmi, members.app_inf api,members.communication_inf comi where pi.id=api.basic_appid and pi.id=ocmi.basic_ocid and pi.id=comi.basic_cid and pi.id > 2000000 and pi.id <= 12000000 into outfile '/var/lib/mysql-files/appSimData.csv' FIELDS TERMINATED BY ',' ENCLOSED BY '"' LINES TERMINATED BY '\n';
+
+
+
+
+
+
+
+
