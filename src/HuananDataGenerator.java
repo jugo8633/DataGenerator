@@ -2,7 +2,11 @@ import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Created by Jugo on 2019/7/3
@@ -11,7 +15,9 @@ import java.sql.SQLException;
 class HuananDataGenerator
 {
     private SQLiteDataSource sqLiteDataSource;
-    private Connection con;
+    private Connection connection;
+    private Statement statement;
+    private ResultSet resultSet;
     
     HuananDataGenerator()
     {
@@ -26,11 +32,12 @@ class HuananDataGenerator
         sqLiteDataSource.setUrl("jdbc:sqlite:" + strSQLitePath);
         try
         {
-            con = sqLiteDataSource.getConnection();
-            if (null != con)
+            if (null != (connection = sqLiteDataSource.getConnection()))
             {
+                statement = connection.createStatement();
                 return 0;
             }
+            
         }
         catch (SQLException e)
         {
@@ -41,7 +48,21 @@ class HuananDataGenerator
     
     void generate(int nId, int nTotal)
     {
-    
+        int nResult;
+        int simTimes = 0;
+        ArrayList<String> listSQL = new ArrayList<>();
+        
+        try
+        {
+            statement.execute("BEGIN");
+            statement.execute("COMMIT");
+            statement.close();
+            connection.close();
+        }
+        catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
         
     }
     

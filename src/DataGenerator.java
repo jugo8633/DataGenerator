@@ -59,18 +59,10 @@ class DataGenerator
     {
         int nResult;
         int simTimes = 0;
-        ArrayList<String> tableNameResult = new ArrayList<>();
         ArrayList<String> listSQL = new ArrayList<>();
         
         try
         {
-            //get all of table name
-            nResult = mysqlHandler.getTableName(tableNameResult, false);
-            if (-1 == nResult || 0 >= tableNameResult.size())
-            {
-                return;
-            }
-            
             mysqlHandler.execute("SET FOREIGN_KEY_CHECKS=0");
             mysqlHandler.execute("BEGIN");
             con.setAutoCommit(false);
