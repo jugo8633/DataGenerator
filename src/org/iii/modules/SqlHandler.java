@@ -33,11 +33,17 @@ public abstract class SqlHandler
     public final static String SQL_OTHER_COMMUNICATION =
             "INSERT INTO other_communication_inf " + "(uuid, adid,basic_ocid,region, city, os, " + "os_version, model, manufacturer) VALUES ('%s', '%s', '%s','%s','%s','%s'," + "'%s','%s','%s')";
     
-    public final static String SQL_APP = "INSERT INTO app_inf (basic_appid, subscript_status, " +
-            "login_status, language," + "app_install_time, query_num_country_TW,query_type, " +
-            "is_contact, " + "biz_category, is_spam, spam_category) VALUES ('%s', '%s', '%s', " +
-            "'%s'," + "'%s', '%s', '%s', '%s', '%s', '%s','%s')";
+    public final static String SQL_APP =
+            "INSERT INTO app_inf (basic_appid, subscript_status, " + "login_status, language," +
+                    "app_install_time, query_num_country_TW,query_type, " + "is_contact, " +
+                    "biz_category, is_spam, spam_category) VALUES ('%s', '%s', '%s', " + "'%s'," + "'%s', '%s', '%s', '%s', '%s', '%s','%s')";
     
-    public final static String SQL_PERSONAL_ID =
-            "SELECT id FROM personal_inf WHERE uuid = '%s'";
+    public final static String SQL_PERSONAL_ID = "SELECT id FROM personal_inf WHERE uuid = '%s'";
+    
+    
+    //===================  華南 API ======================//
+    public final static String SQL_HUANAN_BANK_ACCOUNT = "INSERT INTO bank_account(birthday, " +
+            "gender,career, residence, income, service_units, marital, education,dependents," +
+            "credit_level, is_SNY, is_register_web_bank,is_app_bank,is_register_mobile_pay ) " +
+            "VALUES('%s','%s','%s','%s',%d,'%s','%s','%s',%d,'%s',%d,%d,%d,%d)";
 }
