@@ -42,8 +42,15 @@ public abstract class SqlHandler
     
     
     //===================  華南 API ======================//
-    public final static String SQL_HUANAN_BANK_ACCOUNT = "INSERT INTO bank_account(birthday, " +
-            "gender,career, residence, income, service_units, marital, education,dependents," +
-            "credit_level, is_SNY, is_register_web_bank,is_app_bank,is_register_mobile_pay ) " +
-            "VALUES('%s','%s','%s','%s',%d,'%s','%s','%s',%d,'%s',%d,%d,%d,%d)";
+    public final static String SQL_HUANAN_BANK_ACCOUNT = "INSERT INTO bank_account(uuid,birthday,"
+            + "gender,career, residence, income, service_units, marital, education,dependents," + "credit_level, is_SNY, is_register_web_bank,is_app_bank,is_register_mobile_pay ) " + "VALUES('%s','%s','%s','%s','%s',%s,'%s','%s','%s',%d,'%s',%d,%d,%d,%d);";
+    
+    public final static String SQL_BANK_ACCOUNT_ID =
+            "SELECT id FROM bank_account WHERE uuid = " + "'%s';";
+    
+    public final static String SQL_ACCOUNT_NUMBER = "INSERT INTO account_number(user_id," +
+            "account_num) VALUES(%d,'%s');";
+    
+    public final static String SQL_TRANS_RECORD = "INSERT INTO trans_record( user_id, " +
+            "account_num,trans_type,trans_channel,trans_date,amount,balance) VALUES" + "(%d,'%s','%s','%s','%s',%d,%d)";
 }

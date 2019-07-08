@@ -64,76 +64,99 @@ class HuananDataGenerator
         try
         {
             connection.setAutoCommit(false);
-            statement.execute("BEGIN");
             while (nTotal > simTimes)
             {
                 //模擬數據與產生SQL
                 simulateData(listSQL);
+                if (0 >= listSQL.size())
+                {
+                    System.out.println("Error!! No SQL for Simulate Data");
+                    connection.rollback();
+                    continue;
+                }
+                
+                nResult = -1;
+                for (String strSQL : listSQL)
+                {
+                    if (-1 == runSQL(strSQL))
+                    {
+                        System.out.println("Exec SQL Fail: " + strSQL);
+                        connection.rollback();
+                        nResult = -1;
+                        break;
+                    }
+                    nResult = 0;
+                }
+                
+                if (0 == nResult)
+                {
+                    ++simTimes;
+                    connection.commit();
+                    System.out.println("Thread " + nId + " - SQL Commit , Count = " + simTimes);
+                }
             }
-            statement.executeUpdate(String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, ));
-            statement.execute("COMMIT");
-            
             statement.close();
             connection.close();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
             e.printStackTrace();
         }
         
     }
     
+    private int runSQL(String strSQL)
+    {
+        if (null != statement)
+        {
+            try
+            {
+                statement.executeUpdate(strSQL);
+                return 0;
+            }
+            catch (SQLException e)
+            {
+                e.printStackTrace();
+            }
+        }
+        return -1;
+    }
+    
     private void simulateData(ArrayList<String> listSQL) throws Exception
     {
-        String basic_id;
+        int basic_id;
+        String strAccountNum;
         String strSQL;
         String strUUID;
         
         listSQL.clear();
         strUUID = BIF.strUUID(1);
-        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, BIF.strChineseName(),
-                BIF.strEnglishName(), BIF.gender(), BIF.strID());
-        if (-1 == statement.executeUpdate(strSQL))
+        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, BIF.strBirthday(1),
+                BIF.strGender(), BIF.strJobHuanan(), BIF.strResidence(), BIF.strIncome(),
+                BIF.strService_units(), BIF.strMarital(), BIF.strEducation(), BIF.dependents(),
+                BIF.strCredit_level(), BIF.is_SNY(), BIF.is_register_web_bank(),
+                BIF.is_app_bank(), BIF.is_register_mobile_pay());
+        if (-1 == runSQL(strSQL))
         {
             System.out.println("Error Exec SQL: " + strSQL);
             return;
         }
         
         basic_id = getBasicId(strUUID);
-        if (null == basic_id)
+        if (0 > basic_id)
         {
             System.out.println("Error basic_id invalid uuid: " + strUUID);
             return;
         }
         
-//        listSQL.add(String.format(SqlHandler.SQL_COMMUNICATION, BIF.strMobilePhone(4),
-//                BIF.strPhone(0, 2), BIF.strEmail(), listStreet.get(random.nextInt(m_nStreetSize))
-//                , BIF.strGeographicalLevel(), basic_id));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_JOB, basic_id, BIF.strJob(), BIF.strJobTitle(),
-//                BIF.strCustomHis(), BIF.strIncome()));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_ACCOUNT, basic_id, BIF.strSaveMoney(),
-//                BIF.strTransferNote(), BIF.strATM(), BIF.strLoginBank(), BIF.strIP(),
-//                BIF.strLoginBankWebTime()));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_LOAN, basic_id, BIF.strTheNumOfHisCards(),
-//                BIF.strCreditRating(), BIF.strBuilding(), BIF.strBuildingInch(),
-//                BIF.strCategorical(), BIF.strComeFrom(), BIF.strBadRecord(), BIF.strDelayDate()));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_CONSUMPTION, basic_id, BIF.strMCC(),
-//                BIF.strMCC(), BIF.strSaleType(), BIF.strShopingInfo(),
-//                BIF.strDepartmentTransRatio(), BIF.strCreditOnlineTransRatio(),
-//                BIF.strLatitudeAndLongitude()));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_OTHER_COMMUNICATION, strUUID, BIF.strUUID(0),
-//                basic_id, BIF.strRegion(), BIF.strTaiwanCity(), BIF.strOS(0), BIF.strOsVersion(0)
-//                , BIF.strMobileModel(9), BIF.strManufacturer()));
-//
-//        listSQL.add(String.format(SqlHandler.SQL_APP, basic_id, BIF.subscriptStatus(),
-//                BIF.intLoginStatus(), BIF.strLanguage(0), BIF.strAppInstallTime(),
-//                BIF.strRegion(), BIF.queryType(), BIF.isContact(), BIF.bizCategory(),
-//                BIF.isSpam(), BIF.spamCategory()));
+        
+        strAccountNum = BIF.strAccountNumber();
+        listSQL.add(String.format(SqlHandler.SQL_ACCOUNT_NUMBER, basic_id, strAccountNum));
+   
+        listSQL.add(String.format(SqlHandler.SQL_TRANS_RECORD, basic_id, strAccountNum,
+                BIF.strTransType(),BIF.strTransChannel(),BIF.strTransDate(),BIF.amount(),BIF.balence()));
+
+
     }
     
     private int initStreetData(BuildInFunction buildInFunction)
@@ -146,5 +169,17 @@ class HuananDataGenerator
         }
         m_nStreetSize = listStreet.size() - 1;
         return listStreet.size();
+    }
+    
+    private int getBasicId(String strUUID) throws SQLException
+    {
+        String strSQL = String.format(SqlHandler.SQL_BANK_ACCOUNT_ID, strUUID);
+        //System.out.println(strSQL);
+        ResultSet tmpNID = statement.executeQuery(strSQL);
+        if (tmpNID.next())
+        {
+            return tmpNID.getInt("id");
+        }
+        return -1;
     }
 }

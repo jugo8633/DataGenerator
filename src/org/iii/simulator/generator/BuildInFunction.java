@@ -246,6 +246,44 @@ public class BuildInFunction
         return jobs[nIndex];
     }
     
+    final String[] jobsHuanan = {"製造業", "金融及保險業", "教育業", "批發及零售業", "住宿及餐飲業", "其他服務業", "其他"};
+    
+    public String strJobHuanan()
+    {
+        double[] p = {0.25, 0.15, 0.07, 0.15, 0.19, 0.10, 0.9};
+        ArrayList result =
+                (ArrayList) new MultinominalDistributionFuncs().multinominalRandomGenerator(1, 7,
+                        p);
+        
+        int nIndex = (int) result.get(0);
+        if (0 > nIndex || jobs.length <= nIndex)
+        {
+            nIndex = 0;
+        }
+        
+        return jobs[nIndex];
+    }
+    
+    final String[] residence = {"台北市", "基隆市", "新北市", "宜蘭縣", "台中市", "彰化縣", "南投縣", "嘉義市", "嘉義縣",
+            "雲林縣", "台南市", "高雄市", "澎湖縣", "屏東縣", "台東縣", "花蓮縣", "連江縣"};
+    
+    public String strResidence()
+    {
+        double[] p = {0.16, 0.02, 0.24, 0.16, 0.09, 0.04, 0.01, 0.01, 0.01, 0.02, 0.07, 0.12,
+                0.002, 0.03, 0.007, 0.01, 0.001};
+        ArrayList result =
+                (ArrayList) new MultinominalDistributionFuncs().multinominalRandomGenerator(1, 17
+                        , p);
+        
+        int nIndex = (int) result.get(0);
+        if (0 > nIndex || residence.length <= nIndex)
+        {
+            nIndex = 0;
+        }
+        
+        return residence[nIndex];
+    }
+    
     /**
      * n=8,p1=0.01,p2=0.01,p3=0.1,p4=0.5,p5=0.3,p6=0.04,p7=0.01,p8=0.03
      * 大型企業負責人/董監事	1%
@@ -266,6 +304,38 @@ public class BuildInFunction
     public String strJobTitle()
     {
         return MultinominalDistribution(jobTitleP, jobTitleS);
+    }
+    
+    /**
+     * 領現：53.13%
+     * 台幣轉帳：24.04 %
+     * 外匯結購結售：4.33%
+     * 基金：12.23%
+     * 貸款：2.06%
+     * 繳稅費：3.93%
+     * 其他 ： 0.28%
+     */
+    private final double[] trans_typeP = {0.53,0.24,0.04,0.12,0.02,0.04,0.003};
+    private final String[] trans_typeS = {"領現","台幣轉帳","外匯結購結售","基金","貸款","繳稅費","其他"};
+    
+    public String strTransType()
+    {
+        return MultinominalDistribution(trans_typeP, trans_typeS);
+    }
+    
+    /**
+     * 臨櫃：18.74%
+     * 網銀：20.78%
+     * 行銀：25.77%
+     * ATM：32.58%
+     * 網路ATM：1.13%
+     * 其他 ：1%
+     */
+    private final double[] trans_channelP = {0.19,0.21,0.26,0.33,0.01,0.01};
+    private final String[] trans_channelS = {"臨櫃","網銀","行銀","ATM","網路ATM","其他"};
+    public String strTransChannel()
+    {
+        return MultinominalDistribution(trans_channelP, trans_channelS);
     }
     
     public String MultinominalDistribution(double[] p, String[] strItemName)
@@ -319,6 +389,52 @@ public class BuildInFunction
     {
         return MultinominalDistribution(transferNoteP, transferNoteS);
     }
+    
+    /**
+     * 華南
+     * 私人企業：45.3%
+     * 銀行：12.9%
+     * 學校：6.6%
+     * 公共企業：15.3%
+     * 其他：19.9%
+     */
+    private final double[] service_unitsP = {0.45, 0.13, 0.07, 0.15, 0.20};
+    private final String[] service_unitsS = {"私人企業", "銀行", "學校", "公共企業", "其他"};
+    
+    public String strService_units()
+    {
+        return MultinominalDistribution(service_unitsP, service_unitsS);
+    }
+    
+    /**
+     * 華南
+     * 未婚：51.28%
+     * 已婚：45.19%
+     * 其他：3.53%
+     */
+    private final double[] maritalP = {0.51, 0.45, 0.04};
+    private final String[] maritalS = {"未婚", "已婚", "其他"};
+    
+    public String strMarital()
+    {
+        return MultinominalDistribution(maritalP, maritalS);
+    }
+    
+    /**
+     * 華南
+     * 國中以下：2.63%
+     * 高中職：29.67%
+     * 專科/大學：57.28%
+     * 研究所以上：10.43%
+     */
+    private final double[] educationP = {0.03, 0.30, 0.57, 0.10};
+    private final String[] educationS = {"國中以下", "高中職", "專科/大學", "研究所以上"};
+    
+    public String strEducation()
+    {
+        return MultinominalDistribution(educationP, educationS);
+    }
+    
     
     /**
      * MCC 8碼 前4制式 後4流水
@@ -614,7 +730,11 @@ public class BuildInFunction
         return strB;
     }
     
-    public String strBirthday()
+    /**
+     * @param nType data format, 0:YYYY/mm/DD , 1:YYYY-mm-DD
+     * @return
+     */
+    public String strBirthday(int nType)
     {
         
         int nAge = random.nextInt(60);
@@ -641,7 +761,17 @@ public class BuildInFunction
             nDay = random.nextInt(30);
         }
         
-        String strB = String.format("%d/%d/%d", nYear, nMonth, nDay);
+        String strB = "";
+        switch (nType)
+        {
+            case 0:
+                strB = String.format("%d/%d/%d", nYear, nMonth, nDay);
+                break;
+            case 1:
+                strB = String.format("%d-%02d-%02d", nYear, nMonth, nDay);
+                break;
+        }
+        
         return strB;
     }
     
@@ -898,6 +1028,51 @@ public class BuildInFunction
         return strResult;
     }
     
+    public int is_SNY()
+    {
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.02);
+        return binominalDistFuncs.getSample(1)[0];
+    }
+    
+    public int is_register_web_bank()
+    {
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.27);
+        return binominalDistFuncs.getSample(1)[0];
+    }
+    
+    public int is_app_bank()
+    {
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.11);
+        return binominalDistFuncs.getSample(1)[0];
+    }
+    
+    public int is_register_mobile_pay()
+    {
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.02);
+        return binominalDistFuncs.getSample(1)[0];
+    }
+    
+    
+    public int dependents()
+    {
+        return random.nextInt(6);
+    }
+    
+    public String strCredit_level()
+    {
+        String[] creditLevel = {"A", "B", "C"};
+        return creditLevel[random.nextInt(creditLevel.length)];
+    }
+    
+    public String strAccountNumber()
+    {
+        String strnum = String.format("%d%d%d%d", (103 + random.nextInt(300)),
+                (1000 + random.nextInt(7999)), (100 + random.nextInt(899)),
+                (10 + random.nextInt(89)));
+        return strnum;
+    }
+    
+    
     public int intLoginStatus()
     {
         BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.7);
@@ -934,6 +1109,22 @@ public class BuildInFunction
                 break;
             case 1:
                 genderResult = "F";
+        }
+        return genderResult;
+    }
+    
+    public String strGender()
+    {
+        String genderResult = null;
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.6);
+        int genderEncoding = binominalDistFuncs.getSample(1)[0];
+        switch (genderEncoding)
+        {
+            case 0:
+                genderResult = "男";
+                break;
+            case 1:
+                genderResult = "女";
         }
         return genderResult;
     }
@@ -1272,5 +1463,43 @@ public class BuildInFunction
         return String.format("%f %f", La, Lo);
     }
     
+    /**
+     * 最早為2011-01-01，最晚為2019-04-30
+     * @return
+     */
+    public String strTransDate()
+    {
+        String strYear = String.format("%d",(2011 + random.nextInt(8)));
+        int nMonth = random.nextInt(12);
+        if (0 == nMonth)
+        {
+            nMonth = 2;
+        }
+        int nDay;
+        if (2 == nMonth)
+        {
+            nDay = random.nextInt(28);
+        }
+        else
+        {
+            nDay = random.nextInt(30);
+        }
+        if(0 == strYear.compareTo("2019"))
+        {
+            if(4 < nMonth)
+                nMonth = 4;
+        }
+        
+        return String.format("%s-%02d-%02d",strYear,nMonth,nDay);
+    }
     
+    public int amount()
+    {
+        return (269203 + random.nextInt(76000000));
+    }
+    
+    public int balence()
+    {
+        return (888888 + random.nextInt(9000000));
+    }
 }
