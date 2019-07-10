@@ -1640,14 +1640,6 @@ public class BuildInFunction
         return randomAverage(1, 84990000, 8800000);
     }
     
-    /*最小值 1.60%
-最大值 1.82%
-平均值 1.70%*/
-    public int huananInterestRate()
-    {
-        return randomAverage(1, 84990000, 8800000);
-    }
-    
     private int randomAverage(int nMin, int nMax, int nAverage)
     {
         int nBasic = 1;
@@ -1657,8 +1649,13 @@ public class BuildInFunction
         {
             ++nBasic;
         }
+        if (1 > (nMin / nBasic))
+        {
+            nBasic = 1;
+        }
         if (0 == random.nextInt(1))
         {
+            
             nResult = nAverage - random.nextInt(nMin / nBasic);
         }
         else
@@ -1672,5 +1669,13 @@ public class BuildInFunction
         return nResult;
     }
     
+    /*最小值 1.60%
+最大值 1.82%
+平均值 1.70%*/
+    public double huananInterestRate()
+    {
+        double[] rate = {1.60, 1.82, 1.70};
+        return rate[random.nextInt(3)];
+    }
     
 }

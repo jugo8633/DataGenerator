@@ -57,5 +57,5 @@ public abstract class SqlHandler
     
     public final static String SQL_LOAN_RECORD = "INSERT INTO loan_record(user_id,amount,percent,"
             + "usage,period,payment_sources,grace_period,property,appraisal,balance,value," +
-            "situation,interest_rate) VALUES(%d,%d,%d,'%s',%d,'%s','%s','%s',%d,%d,%d,'%s',%d);";
+            "situation,interest_rate) VALUES(%d,%d,%d,'%s',%d,'%s','%s','%s',%d,%d,%d,'%s',%f);";
 }
