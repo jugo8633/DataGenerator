@@ -160,17 +160,20 @@ class HuananDataGenerator
         // "amount" INTEGER,@
         // "percent" INTEGER,@
         // "usage" TEXT,@
-        // "period" INTEGER,
-        // "payment_sources" TEXT,
-        // "grace_period" TEXT,
-        // "property" TEXT,
-        // "appraisal" INTEGER,
-        // "balance" INTEGER,
-        // "value" INTEGER,
-        // "situation" TEXT,
+        // "period" INTEGER,@
+        // "payment_sources" TEXT,@
+        // "grace_period" TEXT,@
+        // "property" TEXT,@
+        // "appraisal" INTEGER,@
+        // "balance" INTEGER,@
+        // "value" INTEGER,@
+        // "situation" TEXT,@
         // "interest_rate" INTEGER
         listSQL.add(String.format(SqlHandler.SQL_LOAN_RECORD, user_id, BIF.amount(800000,
-                50000000, 6000000), BIF.strHuananLoanPercent(), BIF.strHuananLoanUsage()));
+                50000000, 6000000), BIF.strHuananLoanPercent(), BIF.strHuananLoanUsage(),
+                BIF.huanan_loan_period(), BIF.huananPaymentSource(), BIF.huananGracePeriod(),
+                BIF.huananProperty(),BIF.huananAppraisal(),BIF.huananBalance(),BIF.huananValue(),
+                BIF.huananSituation()));
     }
     
     private int initStreetData(BuildInFunction buildInFunction)

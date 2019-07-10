@@ -347,19 +347,22 @@ public class BuildInFunction
 6成 10%
 7成 15%
 8成 50%*/
-    private final double[] huanan_loan_percentP = {0.03,0.04,0.05,0.06,0.07,0.10,0.15,0.50};
-    private final String[] huanan_loan_percentS = {"10","20","30","40","50","60","70","80"};
+    private final double[] huanan_loan_percentP = {0.03, 0.04, 0.05, 0.06, 0.07, 0.10, 0.15, 0.50};
+    private final String[] huanan_loan_percentS = {"10", "20", "30", "40", "50", "60", "70", "80"};
+    
     public int strHuananLoanPercent()
     {
         String strResult = MultinominalDistribution(huanan_loan_percentP, huanan_loan_percentS);
         return Integer.valueOf(strResult);
     }
-   /*購置不動產-自用 60%
-購置不動產-非自用 5%
-房屋修繕 5%
-投資理財與其他 30%*/
-    private final double[] huanan_loan_usageP = {0.6,0.05,0.05,0.3};
-    private final String[] huanan_loan_usageS = {"購置不動產-自用","購置不動產-非自用","房屋修繕","投資理財與其他"};
+    
+    /*購置不動產-自用 60%
+ 購置不動產-非自用 5%
+ 房屋修繕 5%
+ 投資理財與其他 30%*/
+    private final double[] huanan_loan_usageP = {0.6, 0.05, 0.05, 0.3};
+    private final String[] huanan_loan_usageS = {"購置不動產-自用", "購置不動產-非自用", "房屋修繕", "投資理財與其他"};
+    
     public String strHuananLoanUsage()
     {
         return MultinominalDistribution(huanan_loan_usageP, huanan_loan_usageS);
@@ -522,6 +525,52 @@ public class BuildInFunction
     public String strCustomHis()
     {
         return MultinominalDistribution(buildP, buildS);
+    }
+    
+    /*薪資 50%
+營利收入 25%
+投資收入 15%
+租金收入 7%
+利息收入 3%
+其他 2%*/
+    private final double[] huananPaySrcP = {0.5, 0.25, 0.15, 0.07, 0.03, 0.02};
+    private final String[] huananPaySrcS = {"薪資", "營利收入", "投資收入", "租金收入", "利息收入", "其他"};
+    
+    public String huananPaymentSource()
+    {
+        return MultinominalDistribution(huananPaySrcP, huananPaySrcS);
+    }
+    
+    /*無寬限期 65%
+0~1年   8%
+1~2年 12%
+2~3年 15%*/
+    private final double[] huananGracePeriodP = {0.08, 0.12, 0.15};
+    private final String[] huananGracePeriodS = {"0~1年", "1~2年", "2~3年"};
+    
+    public String huananGracePeriod()
+    {
+        return MultinominalDistribution(huananGracePeriodP, huananGracePeriodS);
+    }
+    
+    /*一般房貸 75%
+公教房貸 15%
+政策性房貸 10%*/
+    private final double[] huananPropertyP = {0.75, 0.15, 0.10};
+    private final String[] huananPropertyS = {"一般房貸", "公教房貸", "政策性房貸"};
+    
+    public String huananProperty()
+    {
+        return MultinominalDistribution(huananPropertyP, huananPropertyS);
+    }
+    
+    /*以元為單位
+最小值200萬元
+最大值1億元*/
+    
+    public int huananAppraisal()
+    {
+        return (2000000 + random.nextInt(80000000));
     }
     
     private int ParetoDist(int nCount, int nMax)
@@ -723,6 +772,17 @@ public class BuildInFunction
     public String strCountry()
     {
         return (CharacterInformation.country[random.nextInt(CharacterInformation.country.length - 1)]);
+    }
+    
+    /*無延遲繳款 99.5%
+逾期30天以上 0.35%
+逾期90天以上 0.15%*/
+    private final double[] huananSituationP = {0.99, 0.0035, 0.0015};
+    private final String[] huananSituationS = {"無延遲繳款", "逾期30天以上", "逾期90天以上"};
+    
+    public String huananSituation()
+    {
+        return MultinominalDistribution(huananSituationP, huananSituationS);
     }
     
     public String strLocale()
@@ -1533,18 +1593,20 @@ public class BuildInFunction
         return (888888 + random.nextInt(9000000));
     }
     
-    public int amount(int nMix,int nMax,int nAverage)
+    public int amount(int nMix, int nMax, int nAverage)
     {
         int nResult;
-        if(0 == random.nextInt(1))
+        if (0 == random.nextInt(1))
         {
             nResult = nAverage - random.nextInt(nMix);
         }
         else
         {
             nResult = nAverage + random.nextInt(nMix);
-            if(nMax < nResult)
+            if (nMax < nResult)
+            {
                 nResult = nMax;
+            }
             
         }
         return nResult;
@@ -1557,6 +1619,58 @@ public class BuildInFunction
      */
     public int huanan_loan_period()
     {
-    
+        return randomAverage(1, 30, 12);
     }
+    
+    /*以元為單位
+最小值200萬元
+最大值8500萬元
+平均值950萬*/
+    public int huananBalance()
+    {
+        return randomAverage(2000000, 85000000, 9500000);
+    }
+    
+    /*以元為單位
+最小值1元
+最大值8499萬元
+平均值880萬*/
+    public int huananValue()
+    {
+        return randomAverage(1, 84990000, 8800000);
+    }
+    
+    /*最小值 1.60%
+最大值 1.82%
+平均值 1.70%*/
+    public int huananInterestRate()
+    {
+        return randomAverage(1, 84990000, 8800000);
+    }
+    
+    private int randomAverage(int nMin, int nMax, int nAverage)
+    {
+        int nBasic = 1;
+        int nResult;
+        nBasic = random.nextInt(3);
+        if (0 == nBasic)
+        {
+            ++nBasic;
+        }
+        if (0 == random.nextInt(1))
+        {
+            nResult = nAverage - random.nextInt(nMin / nBasic);
+        }
+        else
+        {
+            nResult = nAverage + random.nextInt(nMax / nBasic);
+            if (nMax < nResult)
+            {
+                nResult = nMax;
+            }
+        }
+        return nResult;
+    }
+    
+    
 }
