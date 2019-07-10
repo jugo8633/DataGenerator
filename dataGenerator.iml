@@ -13,5 +13,10 @@
     <orderEntry type="library" name="commons-math3-3.6.1" level="project" />
     <orderEntry type="library" name="json-20180813" level="project" />
     <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
+    <orderEntry type="library" name="commons-io-2.6" level="project" />
+    <orderEntry type="library" name="commons-math3-3.6.1" level="project" />
+    <orderEntry type="library" name="json-20180813" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.39-bin" level="project" />
+    <orderEntry type="library" name="sqlite-jdbc-3.23.1" level="project" />
   </component>
 </module>

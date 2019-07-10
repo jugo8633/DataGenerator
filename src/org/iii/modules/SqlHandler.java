@@ -52,5 +52,10 @@ public abstract class SqlHandler
             "account_num) VALUES(%d,'%s');";
     
     public final static String SQL_TRANS_RECORD = "INSERT INTO trans_record( user_id, " +
-            "account_num,trans_type,trans_channel,trans_date,amount,balance) VALUES" + "(%d,'%s','%s','%s','%s',%d,%d)";
+            "account_num,trans_type,trans_channel,trans_date,amount,balance) VALUES" + "(%d,'%s',"
+            + "'%s','%s','%s',%d,%d)";
+    
+    public final static String SQL_LOAN_RECORD = "INSERT INTO loan_record(user_id,amount,percent,"
+            + "usage,period,payment_sources,grace_period,property,appraisal,balance,value," +
+            "situation,interest_rate) VALUES(%d,%d,%d,'%s',%d,'%s','%s','%s',%d,%d,%d,'%s',%d);";
 }

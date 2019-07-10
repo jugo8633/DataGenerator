@@ -124,7 +124,7 @@ class HuananDataGenerator
     
     private void simulateData(ArrayList<String> listSQL) throws Exception
     {
-        int basic_id;
+        int user_id;
         String strAccountNum;
         String strSQL;
         String strUUID;
@@ -142,21 +142,35 @@ class HuananDataGenerator
             return;
         }
         
-        basic_id = getBasicId(strUUID);
-        if (0 > basic_id)
+        user_id = getBasicId(strUUID);
+        if (0 > user_id)
         {
             System.out.println("Error basic_id invalid uuid: " + strUUID);
             return;
         }
         
-        
         strAccountNum = BIF.strAccountNumber();
-        listSQL.add(String.format(SqlHandler.SQL_ACCOUNT_NUMBER, basic_id, strAccountNum));
-   
-        listSQL.add(String.format(SqlHandler.SQL_TRANS_RECORD, basic_id, strAccountNum,
-                BIF.strTransType(),BIF.strTransChannel(),BIF.strTransDate(),BIF.amount(),BIF.balence()));
-
-
+        listSQL.add(String.format(SqlHandler.SQL_ACCOUNT_NUMBER, user_id, strAccountNum));
+        
+        listSQL.add(String.format(SqlHandler.SQL_TRANS_RECORD, user_id, strAccountNum,
+                BIF.strTransType(), BIF.strTransChannel(), BIF.strTransDate(), BIF.amount(),
+                BIF.balence()));
+        
+        //"user_id" INTEGER NOT NULL,@
+        // "amount" INTEGER,@
+        // "percent" INTEGER,@
+        // "usage" TEXT,@
+        // "period" INTEGER,
+        // "payment_sources" TEXT,
+        // "grace_period" TEXT,
+        // "property" TEXT,
+        // "appraisal" INTEGER,
+        // "balance" INTEGER,
+        // "value" INTEGER,
+        // "situation" TEXT,
+        // "interest_rate" INTEGER
+        listSQL.add(String.format(SqlHandler.SQL_LOAN_RECORD, user_id, BIF.amount(800000,
+                50000000, 6000000), BIF.strHuananLoanPercent(), BIF.strHuananLoanUsage()));
     }
     
     private int initStreetData(BuildInFunction buildInFunction)

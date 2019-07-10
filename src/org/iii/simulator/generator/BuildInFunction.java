@@ -28,13 +28,13 @@ public class BuildInFunction
     private ArrayList<String> listMobilePhone = new ArrayList<String>();
     
     //function members
-    public String strSurname()
+    private String strSurname()
     {
         surNameIndex = random.nextInt(CharacterInformation.surname.length - 1);
         return CharacterInformation.surname[surNameIndex];
     }
     
-    public String strFirstName()
+    private String strFirstName()
     {
         name1Index = random.nextInt(CharacterInformation.word.length - 1);
         name2Index = random.nextInt(CharacterInformation.word.length - 1);
@@ -51,7 +51,6 @@ public class BuildInFunction
         String surname;
         String name1;
         String name2;
-        String englishName;
         
         if (0 != surNameIndex)
         {
@@ -174,7 +173,7 @@ public class BuildInFunction
      * 套房	2%
      * 其他	2%
      *
-     * @return
+     * @return build
      */
     public String strBuilding()
     {
@@ -223,7 +222,7 @@ public class BuildInFunction
      * 其他	1%
      * 自由業	2%
      *
-     * @return
+     * @return job
      */
     final String[] jobs = {"軍公教", "政府／公營事業", "軍／警／消防", "學校／補習班", "醫療／專業事務所", "金融／保險", "製造／建築",
             "資訊／科技", "貿易／銷售", "服務／傳播", "無業", "退休及家管", "批發零售業", "學生", "其他", "自由業"};
@@ -264,8 +263,8 @@ public class BuildInFunction
         return jobs[nIndex];
     }
     
-    final String[] residence = {"台北市", "基隆市", "新北市", "宜蘭縣", "台中市", "彰化縣", "南投縣", "嘉義市", "嘉義縣",
-            "雲林縣", "台南市", "高雄市", "澎湖縣", "屏東縣", "台東縣", "花蓮縣", "連江縣"};
+    private final String[] residence = {"台北市", "基隆市", "新北市", "宜蘭縣", "台中市", "彰化縣", "南投縣", "嘉義市",
+            "嘉義縣", "雲林縣", "台南市", "高雄市", "澎湖縣", "屏東縣", "台東縣", "花蓮縣", "連江縣"};
     
     public String strResidence()
     {
@@ -315,8 +314,8 @@ public class BuildInFunction
      * 繳稅費：3.93%
      * 其他 ： 0.28%
      */
-    private final double[] trans_typeP = {0.53,0.24,0.04,0.12,0.02,0.04,0.003};
-    private final String[] trans_typeS = {"領現","台幣轉帳","外匯結購結售","基金","貸款","繳稅費","其他"};
+    private final double[] trans_typeP = {0.53, 0.24, 0.04, 0.12, 0.02, 0.04, 0.003};
+    private final String[] trans_typeS = {"領現", "台幣轉帳", "外匯結購結售", "基金", "貸款", "繳稅費", "其他"};
     
     public String strTransType()
     {
@@ -331,14 +330,42 @@ public class BuildInFunction
      * 網路ATM：1.13%
      * 其他 ：1%
      */
-    private final double[] trans_channelP = {0.19,0.21,0.26,0.33,0.01,0.01};
-    private final String[] trans_channelS = {"臨櫃","網銀","行銀","ATM","網路ATM","其他"};
+    private final double[] trans_channelP = {0.19, 0.21, 0.26, 0.33, 0.01, 0.01};
+    private final String[] trans_channelS = {"臨櫃", "網銀", "行銀", "ATM", "網路ATM", "其他"};
+    
     public String strTransChannel()
     {
         return MultinominalDistribution(trans_channelP, trans_channelS);
     }
     
-    public String MultinominalDistribution(double[] p, String[] strItemName)
+    /*
+    * 1成 3%
+2成 4%
+3成 5%
+4成 6%
+5成 7%
+6成 10%
+7成 15%
+8成 50%*/
+    private final double[] huanan_loan_percentP = {0.03,0.04,0.05,0.06,0.07,0.10,0.15,0.50};
+    private final String[] huanan_loan_percentS = {"10","20","30","40","50","60","70","80"};
+    public int strHuananLoanPercent()
+    {
+        String strResult = MultinominalDistribution(huanan_loan_percentP, huanan_loan_percentS);
+        return Integer.valueOf(strResult);
+    }
+   /*購置不動產-自用 60%
+購置不動產-非自用 5%
+房屋修繕 5%
+投資理財與其他 30%*/
+    private final double[] huanan_loan_usageP = {0.6,0.05,0.05,0.3};
+    private final String[] huanan_loan_usageS = {"購置不動產-自用","購置不動產-非自用","房屋修繕","投資理財與其他"};
+    public String strHuananLoanUsage()
+    {
+        return MultinominalDistribution(huanan_loan_usageP, huanan_loan_usageS);
+    }
+    
+    private String MultinominalDistribution(double[] p, String[] strItemName)
     {
         String strResult;
         ArrayList result =
@@ -1465,11 +1492,12 @@ public class BuildInFunction
     
     /**
      * 最早為2011-01-01，最晚為2019-04-30
+     *
      * @return
      */
     public String strTransDate()
     {
-        String strYear = String.format("%d",(2011 + random.nextInt(8)));
+        String strYear = String.format("%d", (2011 + random.nextInt(8)));
         int nMonth = random.nextInt(12);
         if (0 == nMonth)
         {
@@ -1484,13 +1512,15 @@ public class BuildInFunction
         {
             nDay = random.nextInt(30);
         }
-        if(0 == strYear.compareTo("2019"))
+        if (0 == strYear.compareTo("2019"))
         {
-            if(4 < nMonth)
+            if (4 < nMonth)
+            {
                 nMonth = 4;
+            }
         }
         
-        return String.format("%s-%02d-%02d",strYear,nMonth,nDay);
+        return String.format("%s-%02d-%02d", strYear, nMonth, nDay);
     }
     
     public int amount()
@@ -1501,5 +1531,32 @@ public class BuildInFunction
     public int balence()
     {
         return (888888 + random.nextInt(9000000));
+    }
+    
+    public int amount(int nMix,int nMax,int nAverage)
+    {
+        int nResult;
+        if(0 == random.nextInt(1))
+        {
+            nResult = nAverage - random.nextInt(nMix);
+        }
+        else
+        {
+            nResult = nAverage + random.nextInt(nMix);
+            if(nMax < nResult)
+                nResult = nMax;
+            
+        }
+        return nResult;
+    }
+    
+    /*
+    最小值0.5年
+最大值30年
+平均值 12年
+     */
+    public int huanan_loan_period()
+    {
+    
     }
 }
