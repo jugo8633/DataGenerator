@@ -1678,4 +1678,150 @@ public class BuildInFunction
         return rate[random.nextInt(3)];
     }
     
+    /*HAA000001~HAA200000*/
+    public String huanan_benefit_id()
+    {
+        return String.format("HAA%06d", random.nextInt(200000));
+    }
+    
+    public String huanan_property()
+    {
+        final double[] P = {0.60, 0.40};
+        final String[] S = {"正擔保", "加強債權"};
+        return MultinominalDistribution(P, S);
+    }
+    
+    public String huanan_location()
+    {
+        final double[] P = {0.02, 0.22, 0.25, 0.13, 0.02, 0.04, 0.03, 0.08, 0.02, 0.001, 0.008,
+                0.004, 0.008, 0.06, 0.09, 0.01, 0.020, 0.007, 0.006, 0.0002, 0.0001};
+        final String[] S = {"基隆市", "台北市", "新北市", "桃園市", "新竹市", "新竹縣", "苗栗縣", "台中市", "彰化縣", "南投縣",
+                "雲林縣", "嘉義縣", "嘉義市", "台南市", "高雄市", "屏東縣", "宜蘭縣", "花蓮縣", "台東縣", "澎湖縣", "金門縣"};
+        return MultinominalDistribution(P, S);
+    }
+    
+    public String huanan_building_type()
+    {
+        final double[] P = {0.15, 0.1, 0.06, 0.04, 0.4, 0.2, 0.05};
+        final String[] S = {"公寓(5樓含以下無電梯)", "透天厝", "店面(店舖)", "辦公室商業大樓", "住宅大樓(11層含以上有電梯)",
+                "華廈" + "(10層含以下有電梯)", "套房"};
+        return MultinominalDistribution(P, S);
+    }
+    
+    /*住宅區 45%
+商業區 35%
+工業區 15%
+其他 5%*/
+    public String huanan_proximity_attr()
+    {
+        final double[] P = {0.45, 0.35, 0.15, 0.05};
+        final String[] S = {"住宅區", "商業區", "工業區", "其他"};
+        return MultinominalDistribution(P, S);
+    }
+    
+    /*10年以下 7%
+10年~20年 22%
+20年~30年27%
+30年~40年24%
+40年以上20%*/
+    public String huanan_house_age()
+    {
+        final double[] P = {0.07, 0.22, 0.27, 0.24, 0.20};
+        final String[] S = {"10年以下", "10年~20年", "20年~30年", "30年~40年", "40年以上"};
+        return MultinominalDistribution(P, S);
+    }
+    
+    public String huanan_fund_code()
+    {
+        final String[] S = {"D1", "D2", "D3", "D4", "D5"};
+        return S[random.nextInt(5)];
+    }
+    
+    public String huanan_fund_name(String fund_code)
+    {
+        if (0 == fund_code.compareTo("D1"))
+        {
+            return "華南永昌永昌基金";
+        }
+        
+        if (0 == fund_code.compareTo("D2"))
+        {
+            return "華南永昌鳳翔貨幣市場基金";
+        }
+        
+        if (0 == fund_code.compareTo("D3"))
+        {
+            return "華南永昌龍盈平衡基金";
+        }
+        
+        if (0 == fund_code.compareTo("D4"))
+        {
+            return "華南永昌麒麟貨幣市場基金";
+        }
+        
+        if (0 == fund_code.compareTo("D5"))
+        {
+            return "華南永昌物聯網精選基金";
+        }
+        
+        return "華南永昌永昌基金";
+    }
+    
+    private final String[] dividend = {"月配", "季配", "年配", "半年配"};
+    
+    public String huanan_dividend_category()
+    {
+        return dividend[random.nextInt(4)];
+    }
+    
+    public double huanan_net(String fund_code)
+    {
+        double[] net = {20.05, 12.05, 24.9565, 16.2784, 17.40};
+        if (0 == fund_code.compareTo("D1"))
+        {
+            return net[0];
+        }
+        
+        if (0 == fund_code.compareTo("D2"))
+        {
+            return net[1];
+        }
+        
+        if (0 == fund_code.compareTo("D3"))
+        {
+            return net[2];
+        }
+        
+        if (0 == fund_code.compareTo("D4"))
+        {
+            return net[3];
+        }
+        
+        if (0 == fund_code.compareTo("D5"))
+        {
+            return net[4];
+        }
+        
+        return net[0];
+    }
+    
+    private final String[] ac = {"台幣", "指定外幣", "綜合外幣"};
+    
+    public String huanan_account_category()
+    {
+        return ac[random.nextInt(3)];
+    }
+    
+    public int huanan_capital()
+    {
+        return 100000 + random.nextInt(5000000);
+    }
+    
+    private String[] bankcode = {"001", "003", "004", "005", "006", "007", "008", "009", "010",
+            "011", "012", "013", "016", "017", "018", "021", "024", "025", "039", "040", "050",
+            "104", "108"};
+    public String huanan_bank_code()
+    {
+        return bankcode[random.nextInt(bankcode.length)];
+    }
 }

@@ -159,8 +159,26 @@ class HuananDataGenerator
         listSQL.add(String.format(SqlHandler.SQL_LOAN_RECORD, user_id, BIF.amount(800000,
                 50000000, 6000000), BIF.strHuananLoanPercent(), BIF.strHuananLoanUsage(),
                 BIF.huanan_loan_period(), BIF.huananPaymentSource(), BIF.huananGracePeriod(),
-                BIF.huananProperty(),BIF.huananAppraisal(),BIF.huananBalance(),BIF.huananValue(),
-                BIF.huananSituation(),BIF.huananInterestRate()));
+                BIF.huananProperty(), BIF.huananAppraisal(), BIF.huananBalance(),
+                BIF.huananValue(), BIF.huananSituation(), BIF.huananInterestRate()));
+        
+        listSQL.add(String.format(SqlHandler.SQL_CONSTRUCTION_RECORD, user_id,
+                BIF.huanan_benefit_id(), BIF.huanan_property(), BIF.huanan_location(),
+                BIF.huanan_building_type(), BIF.huanan_proximity_attr(), BIF.huanan_house_age()));
+        
+        String strFundCode = BIF.huanan_fund_code();
+        listSQL.add(String.format(SqlHandler.SQL_FUND_INFORMATION, user_id, strFundCode,
+                BIF.huanan_fund_name(strFundCode), "台幣(TWN)", BIF.huanan_dividend_category(),
+                BIF.strTransDate(), BIF.huanan_net(strFundCode)));
+        
+        /*
+    
+    
+   
+    account_number" TEXT,
+    "create_date" TEXT )*/
+        listSQL.add(String.format(SqlHandler.SQL_FUND_ACCOUNT, user_id,
+                BIF.huanan_account_category(),BIF.huanan_capital(),BIF.huanan_bank_code()));
     }
     
     private int initStreetData(BuildInFunction buildInFunction)

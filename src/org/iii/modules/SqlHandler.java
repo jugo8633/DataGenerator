@@ -58,4 +58,14 @@ public abstract class SqlHandler
     public final static String SQL_LOAN_RECORD = "INSERT INTO loan_record(user_id,amount,percent,"
             + "usage,period,payment_sources,grace_period,property,appraisal,balance,value," +
             "situation,interest_rate) VALUES(%d,%d,%d,'%s',%d,'%s','%s','%s',%d,%d,%d,'%s',%f);";
+    
+    public final static String SQL_CONSTRUCTION_RECORD = "INSERT INTO construction_record" +
+            "(user_id,benefit_id,property,location,building_type,proximity_attr,house_age) " +
+            "VALUES" + "(%d,'%s','%s','%s','%s','%s','%s')";
+    
+    public final static String SQL_FUND_INFORMATION = "INSERT INTO fund_information(user_id," +
+            "fund_code,fund_name,price_currency,dividend_category,net_datetime,net ) VALUES(%d," + "'%s','%s','%s','%s','%s',%f)";
+    
+    public final static String SQL_FUND_ACCOUNT = "INSERT INTO fund_account( user_id," +
+            "account_category,capital,bank_code,account_number )VALUES(%d)";
 }
