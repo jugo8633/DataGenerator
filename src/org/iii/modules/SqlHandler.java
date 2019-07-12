@@ -67,5 +67,14 @@ public abstract class SqlHandler
             "fund_code,fund_name,price_currency,dividend_category,net_datetime,net ) VALUES(%d," + "'%s','%s','%s','%s','%s',%f)";
     
     public final static String SQL_FUND_ACCOUNT = "INSERT INTO fund_account( user_id," +
-            "account_category,capital,bank_code,account_number )VALUES(%d)";
+            "account_category,capital,bank_code,account_number )VALUES(%d,'%s',%d,'%s','%s')";
+    
+    public final static String SQL_FUND_INVENTORY = "INSERT INTO fund_inventory(user_id," +
+            "fund_code, fund_name,price_currency,inventory_unit,investment_cost)VALUES(%d,'%s'," + "'%s','%s',%d,%d)";
+    
+    public final static String SQL_BENEFICIARY = "INSERT INTO beneficiary(user_id,benefit_id," +
+            "benefit_name,birth,risk,risk_exp_date )VALUES(%d,'%s','%s','%s',%d,'%s')";
+    
+    public final static String SQL_BLACK_LIST =
+            "INSERT INTO blacklist(identity_id, license_no)" + "VALUES('%s','%s')";
 }

@@ -26,6 +26,7 @@ public class BuildInFunction
     private int name2Index = 0;
     private Random random = new Random();
     private ArrayList<String> listMobilePhone = new ArrayList<String>();
+    private final static String EnglistUp = "ABCDEFGHJKLMNPQRSTUVWXYZIO";
     
     //function members
     private String strSurname()
@@ -1153,10 +1154,9 @@ public class BuildInFunction
     
     public String strAccountNumber()
     {
-        String strnum = String.format("%d%d%d%d", (103 + random.nextInt(300)),
+        return String.format("%d%d%d%d", (103 + random.nextInt(300)),
                 (1000 + random.nextInt(7999)), (100 + random.nextInt(899)),
                 (10 + random.nextInt(89)));
-        return strnum;
     }
     
     
@@ -1681,7 +1681,7 @@ public class BuildInFunction
     /*HAA000001~HAA200000*/
     public String huanan_benefit_id()
     {
-        return String.format("HAA%06d", random.nextInt(200000));
+        return String.format("%06d", random.nextInt(200000));
     }
     
     public String huanan_property()
@@ -1820,8 +1820,37 @@ public class BuildInFunction
     private String[] bankcode = {"001", "003", "004", "005", "006", "007", "008", "009", "010",
             "011", "012", "013", "016", "017", "018", "021", "024", "025", "039", "040", "050",
             "104", "108"};
+    
     public String huanan_bank_code()
     {
         return bankcode[random.nextInt(bankcode.length)];
+    }
+    
+    public int huanan_inventory_unit()
+    {
+        return 100 + random.nextInt(1000);
+    }
+    
+    public int huanan_investment_cost()
+    {
+        return 100000 + random.nextInt(1000000);
+    }
+    
+    public int huanan_risk()
+    {
+        int nRisk = random.nextInt(3);
+        ++nRisk;
+        return nRisk;
+    }
+    
+    //AJF-0001～DZZ-9999
+    public String strCarId()
+    {
+        StringBuilder strId = new StringBuilder();
+        for (int i = 0; i < 3; ++i)
+        {
+            strId.append(EnglistUp.charAt(random.nextInt(EnglistUp.length())));
+        }
+        return String.format("%s-%04d", strId.toString(), random.nextInt(9999));
     }
 }
