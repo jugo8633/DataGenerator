@@ -1,3 +1,5 @@
+import org.apache.commons.io.LineIterator;
+import org.iii.modules.FileHandler;
 import org.iii.modules.SqlHandler;
 import org.iii.simulator.generator.BuildInFunction;
 import org.sqlite.SQLiteConfig;
@@ -26,6 +28,9 @@ class HuananDataGenerator
     private Statement statement;
     private ResultSet resultSet;
     private final String strPriceCurrency = "台幣(TWN)";
+    private int m_nSerial;
+    private LineIterator iterator;
+    private FileHandler fileHandler;
     
     HuananDataGenerator()
     {
@@ -62,9 +67,24 @@ class HuananDataGenerator
         int simTimes = 0;
         ArrayList<String> listSQL = new ArrayList<>();
         
+        fileHandler = new FileHandler();
+        
         try
         {
+            iterator = fileHandler.loadFile("database/serial.txt", "UTF-8");
             connection.setAutoCommit(false);
+            m_nSerial = 0;
+            runSQL("delete from bank_account");
+            runSQL("delete from account_number");
+            runSQL("delete from trans_record");
+            runSQL("delete from loan_record");
+            runSQL("delete from construction_record");
+            runSQL("delete from fund_information");
+            runSQL("delete from fund_account");
+            runSQL("delete from fund_inventory");
+            runSQL("delete from beneficiary");
+            runSQL("delete from blacklist");
+            
             while (nTotal > simTimes)
             {
                 //模擬數據與產生SQL
@@ -129,14 +149,21 @@ class HuananDataGenerator
         String strAccountNum;
         String strSQL;
         String strUUID;
+        String strSerial = "";
+        
+        if (iterator.hasNext())
+        {
+            strSerial = iterator.nextLine();
+        }
         
         listSQL.clear();
         strUUID = BIF.strUUID(1);
-        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, BIF.strBirthday(1),
-                BIF.strGender(), BIF.strJobHuanan(), BIF.strResidence(), BIF.strIncome(),
-                BIF.strService_units(), BIF.strMarital(), BIF.strEducation(), BIF.dependents(),
-                BIF.strCredit_level(), BIF.is_SNY(), BIF.is_register_web_bank(),
-                BIF.is_app_bank(), BIF.is_register_mobile_pay());
+        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID,
+                Integer.valueOf(strSerial), BIF.strBirthday(1), BIF.strGender(),
+                BIF.strJobHuanan(), BIF.strResidence(), BIF.strIncome(), BIF.strService_units(),
+                BIF.strMarital(), BIF.strEducation(), BIF.dependents(), BIF.strCredit_level(),
+                BIF.is_SNY(), BIF.is_register_web_bank(), BIF.is_app_bank(),
+                BIF.is_register_mobile_pay());
         if (-1 == runSQL(strSQL))
         {
             System.out.println("Error Exec SQL: " + strSQL);
@@ -183,8 +210,8 @@ class HuananDataGenerator
         
         listSQL.add(String.format(SqlHandler.SQL_BENEFICIARY, user_id, BIF.huanan_benefit_id(),
                 BIF.strChineseName(), BIF.strBirthday(1), BIF.huanan_risk(), BIF.strTransDate()));
-    
-        listSQL.add(String.format(SqlHandler.SQL_BLACK_LIST,BIF.strID(),BIF.strCarId()));
+        
+        listSQL.add(String.format(SqlHandler.SQL_BLACK_LIST, BIF.strID(), BIF.strCarId()));
         
     }
     
