@@ -20,6 +20,7 @@ import java.util.UUID;
 
 class HuananDataGenerator
 {
+    private static HuananDataGenerator instance;
     private SQLiteDataSource sqLiteDataSource;
     private BuildInFunction BIF;
     private ArrayList<String> listStreet;
@@ -28,12 +29,12 @@ class HuananDataGenerator
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
-    private final String strPriceCurrency = "台幣(TWN)";
+    private final String strPriceCurrency;
     private int m_nSerial;
     private LineIterator iterator;
     private FileHandler fileHandler;
     
-    HuananDataGenerator()
+    private HuananDataGenerator()
     {
         SQLiteConfig config = new SQLiteConfig();
         config.setSharedCache(true);
@@ -41,6 +42,27 @@ class HuananDataGenerator
         sqLiteDataSource = new SQLiteDataSource(config);
         BIF = new BuildInFunction();
         listStreet = new ArrayList<>();
+        strPriceCurrency = "台幣(TWN)";
+    }
+    
+    /**
+     * this is a singleton class
+     *
+     * @return
+     */
+    public static HuananDataGenerator getInstance()
+    {
+        if (null == instance)
+        {
+            synchronized (HuananDataGenerator.class)
+            {
+                if (null == instance)
+                {
+                    instance = new HuananDataGenerator();
+                }
+            }
+        }
+        return instance;
     }
     
     int init(String strSQLitePath)
@@ -75,21 +97,11 @@ class HuananDataGenerator
             iterator = fileHandler.loadFile("database/serial.txt", "UTF-8");
             connection.setAutoCommit(false);
             m_nSerial = 0;
-            runSQL("delete from sqlite_sequence");
-            runSQL("delete from bank_account");
-            runSQL("delete from account_number");
-            runSQL("delete from trans_record");
-            runSQL("delete from loan_record");
-            runSQL("delete from construction_record");
-            runSQL("delete from fund_information");
-            runSQL("delete from fund_account");
-            runSQL("delete from fund_inventory");
-            runSQL("delete from beneficiary");
-            runSQL("delete from blacklist");
-            runSQL("delete from tokens");
+           
             
-            //while (nTotal > simTimes)
-            while(iterator.hasNext())
+            while (nTotal > simTimes)
+            // tableClear();
+            //while (iterator.hasNext())
             {
                 //模擬數據與產生SQL
                 simulateData(listSQL);
@@ -128,6 +140,22 @@ class HuananDataGenerator
             e.printStackTrace();
         }
         
+    }
+    
+    private void tableClear()
+    {
+        runSQL("delete from sqlite_sequence");
+        runSQL("delete from bank_account");
+        runSQL("delete from account_number");
+        runSQL("delete from trans_record");
+        runSQL("delete from loan_record");
+        runSQL("delete from construction_record");
+        runSQL("delete from fund_information");
+        runSQL("delete from fund_account");
+        runSQL("delete from fund_inventory");
+        runSQL("delete from beneficiary");
+        runSQL("delete from blacklist");
+        runSQL("delete from tokens");
     }
     
     private int runSQL(String strSQL)
@@ -184,7 +212,7 @@ class HuananDataGenerator
             return;
         }
         
-        listSQL.add(String.format(SqlHandler.SQL_TOKENS, user_id, UUID.randomUUID().toString()));
+        listSQL.add(String.format(SqlHandler.SQL_TOKENS, UUID.randomUUID().toString()));
         
         strAccountNum = BIF.strAccountNumber();
         listSQL.add(String.format(SqlHandler.SQL_ACCOUNT_NUMBER, user_id, strAccountNum));
@@ -221,6 +249,14 @@ class HuananDataGenerator
                 BIF.strChineseName(), BIF.strBirthday(1), BIF.huanan_risk(), BIF.strTransDate()));
         
         listSQL.add(String.format(SqlHandler.SQL_BLACK_LIST, BIF.strID(), BIF.strCarId()));
+        
+        /*
+    "policy_no" TEXT,
+    "claim_date" TEXT NOT NULL,
+    "claim_amount" INTEGER,
+    "claim_descript" TEXT,
+    */
+        listSQL.add(String.format(SqlHandler.SQL_CLAM_RECORD,BIF.huanan_claim_no()));
         
     }
     

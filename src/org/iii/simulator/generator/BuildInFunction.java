@@ -1853,4 +1853,24 @@ public class BuildInFunction
         }
         return String.format("%s-%04d", strId.toString(), random.nextInt(9999));
     }
+    
+    /*◎強制險：SCF000001~SCF999999
+◎任意險：SCX000001~SCX999999
+◎旅綜險：SCT000001~SCT999999
+◎個人傷害險：SCA000001~SCA999999
+◎個人健康險：SCH000001~SCH999999*/
+    private final String[] claimhead = {"SCF", "SCX", "SCT", "SCA", "SCH"};
+    
+    public String huanan_claim_no()
+    {
+        return String.format("%s-%06d", claimhead[random.nextInt(5)], random.nextInt(999999));
+    }
+    
+    /*◎強制險：SPF000001~SPF999999
+◎任意險：SPX000001~SPX999999
+◎旅綜險：SPT000001~SPT999999
+◎個人傷害險：SPA000001~SPA999999
+◎個人健康險：SPH000001~SPH999999*/
+   // private final String[]
+    
 }

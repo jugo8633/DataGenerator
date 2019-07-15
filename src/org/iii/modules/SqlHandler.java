@@ -79,5 +79,9 @@ public abstract class SqlHandler
     public final static String SQL_BLACK_LIST =
             "INSERT INTO blacklist(identity_id, license_no)" + "VALUES('%s','%s')";
     
-    public final static String SQL_TOKENS = "INSERT INTO tokens(user_id,token)VALUES(%d,'%s')";
+    public final static String SQL_TOKENS = "INSERT INTO tokens(token)VALUES('%s')";
+    
+    public final static String SQL_CLAM_RECORD =
+            "INSERT INTO claim_record( claim_no,policy_no," + "claim_date,claim_amount," +
+                    "claim_descript )VALUES('%s','%s','%s',%d,'%s')";
 }

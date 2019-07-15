@@ -118,10 +118,9 @@ class MainThread
         public void run()
         {
             System.out.println("Hello I'm Thread " + tid + " I will generate " + m_nRecordCount + " records\n");
-            HuananDataGenerator huananDataGenerator = new HuananDataGenerator();
-            if (0 == huananDataGenerator.init(m_strDBPath))
+            if (0 == HuananDataGenerator.getInstance().init(m_strDBPath))
             {
-                huananDataGenerator.generate(tid, m_nRecordCount);
+                HuananDataGenerator.getInstance().generate(tid, m_nRecordCount);
             }
         }
     }
