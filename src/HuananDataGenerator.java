@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Random;
+import java.util.UUID;
 
 /**
  * Created by Jugo on 2019/7/3
@@ -74,6 +75,7 @@ class HuananDataGenerator
             iterator = fileHandler.loadFile("database/serial.txt", "UTF-8");
             connection.setAutoCommit(false);
             m_nSerial = 0;
+            runSQL("delete from sqlite_sequence");
             runSQL("delete from bank_account");
             runSQL("delete from account_number");
             runSQL("delete from trans_record");
@@ -84,8 +86,10 @@ class HuananDataGenerator
             runSQL("delete from fund_inventory");
             runSQL("delete from beneficiary");
             runSQL("delete from blacklist");
+            runSQL("delete from tokens");
             
-            while (nTotal > simTimes)
+            //while (nTotal > simTimes)
+            while(iterator.hasNext())
             {
                 //模擬數據與產生SQL
                 simulateData(listSQL);
@@ -149,21 +153,24 @@ class HuananDataGenerator
         String strAccountNum;
         String strSQL;
         String strUUID;
-        String strSerial = "";
+        int nSerial = 0;
         
-        if (iterator.hasNext())
+        while (iterator.hasNext())
         {
-            strSerial = iterator.nextLine();
+            nSerial = Integer.valueOf(iterator.nextLine());
+            if (0 == checkSerial(nSerial))
+            {
+                break;
+            }
         }
         
         listSQL.clear();
         strUUID = BIF.strUUID(1);
-        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID,
-                Integer.valueOf(strSerial), BIF.strBirthday(1), BIF.strGender(),
-                BIF.strJobHuanan(), BIF.strResidence(), BIF.strIncome(), BIF.strService_units(),
-                BIF.strMarital(), BIF.strEducation(), BIF.dependents(), BIF.strCredit_level(),
-                BIF.is_SNY(), BIF.is_register_web_bank(), BIF.is_app_bank(),
-                BIF.is_register_mobile_pay());
+        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, nSerial,
+                BIF.strBirthday(1), BIF.strGender(), BIF.strJobHuanan(), BIF.strResidence(),
+                BIF.strIncome(), BIF.strService_units(), BIF.strMarital(), BIF.strEducation(),
+                BIF.dependents(), BIF.strCredit_level(), BIF.is_SNY(), BIF.is_register_web_bank()
+                , BIF.is_app_bank(), BIF.is_register_mobile_pay());
         if (-1 == runSQL(strSQL))
         {
             System.out.println("Error Exec SQL: " + strSQL);
@@ -176,6 +183,8 @@ class HuananDataGenerator
             System.out.println("Error basic_id invalid uuid: " + strUUID);
             return;
         }
+        
+        listSQL.add(String.format(SqlHandler.SQL_TOKENS, user_id, UUID.randomUUID().toString()));
         
         strAccountNum = BIF.strAccountNumber();
         listSQL.add(String.format(SqlHandler.SQL_ACCOUNT_NUMBER, user_id, strAccountNum));
@@ -238,4 +247,16 @@ class HuananDataGenerator
         }
         return -1;
     }
+    
+    private int checkSerial(int nSerial) throws SQLException
+    {
+        ResultSet tmp =
+                statement.executeQuery("SELECT * FROM stock_history WHERE serial = " + nSerial);
+        if (tmp.next())
+        {
+            return 0;
+        }
+        return -1;
+    }
+    
 }

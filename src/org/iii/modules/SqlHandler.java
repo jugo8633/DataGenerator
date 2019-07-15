@@ -44,9 +44,7 @@ public abstract class SqlHandler
     //===================  華南 API ======================//
     public final static String SQL_HUANAN_BANK_ACCOUNT = "INSERT INTO bank_account(uuid," +
             "serial,birthday," + "gender,career, residence, income, service_units, marital, " +
-            "education,dependents," + "credit_level, is_SNY, is_register_web_bank,is_app_bank," +
-            "is_register_mobile_pay ) " + "VALUES('%s',%d,'%s','%s','%s','%s',%s,'%s','%s','%s'," +
-            "%d,'%s',%d,%d,%d,%d);";
+            "education,dependents," + "credit_level, is_SNY, is_register_web_bank,is_app_bank," + "is_register_mobile_pay ) " + "VALUES('%s',%d,'%s','%s','%s','%s',%s,'%s','%s','%s'," + "%d,'%s',%d,%d,%d,%d);";
     
     public final static String SQL_BANK_ACCOUNT_ID =
             "SELECT id FROM bank_account WHERE uuid = " + "'%s';";
@@ -80,4 +78,6 @@ public abstract class SqlHandler
     
     public final static String SQL_BLACK_LIST =
             "INSERT INTO blacklist(identity_id, license_no)" + "VALUES('%s','%s')";
+    
+    public final static String SQL_TOKENS = "INSERT INTO tokens(user_id,token)VALUES(%d,'%s')";
 }
