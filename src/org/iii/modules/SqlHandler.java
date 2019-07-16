@@ -84,4 +84,12 @@ public abstract class SqlHandler
     public final static String SQL_CLAM_RECORD =
             "INSERT INTO claim_record( claim_no,policy_no," + "claim_date,claim_amount," +
                     "claim_descript )VALUES('%s','%s','%s',%d,'%s')";
+    
+    public final static String SQL_INSURANCE_EXP_DATE = "INSERT INTO insurance_exp_date" +
+            "(identity_id,policy_no,exp_date,is_active )VALUES('%s','%s','%s',%d)";
+    
+    public final static String SQL_INSURANCE_RECORD = "INSERT INTO insurance_record(user_id," +
+            "policy_no,classification,insurance_category,insurance_name,insurance_premiums," +
+            "insurance_date,insurance_expiration_date,car_type )VALUES(%d,'%s','%s','%s','%s',%d," +
+            "'%s','%s','%s')";
 }

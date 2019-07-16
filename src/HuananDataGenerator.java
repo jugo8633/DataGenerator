@@ -33,6 +33,7 @@ class HuananDataGenerator
     private int m_nSerial;
     private LineIterator iterator;
     private FileHandler fileHandler;
+    private final String m_strCarType = "自小客(車種代號:03)";
     
     private HuananDataGenerator()
     {
@@ -97,7 +98,7 @@ class HuananDataGenerator
             iterator = fileHandler.loadFile("database/serial.txt", "UTF-8");
             connection.setAutoCommit(false);
             m_nSerial = 0;
-           
+            
             
             while (nTotal > simTimes)
             // tableClear();
@@ -182,6 +183,8 @@ class HuananDataGenerator
         String strSQL;
         String strUUID;
         int nSerial = 0;
+        int nClaimNo = 0;
+        String strPoliceNo;
         
         while (iterator.hasNext())
         {
@@ -250,13 +253,20 @@ class HuananDataGenerator
         
         listSQL.add(String.format(SqlHandler.SQL_BLACK_LIST, BIF.strID(), BIF.strCarId()));
         
-        /*
-    "policy_no" TEXT,
-    "claim_date" TEXT NOT NULL,
-    "claim_amount" INTEGER,
-    "claim_descript" TEXT,
-    */
-        listSQL.add(String.format(SqlHandler.SQL_CLAM_RECORD,BIF.huanan_claim_no()));
+        nClaimNo = BIF.getClaimNO();
+        strPoliceNo = BIF.huanan_policy_no(nClaimNo);
+        listSQL.add(String.format(SqlHandler.SQL_CLAM_RECORD, BIF.huanan_claim_no(nClaimNo),
+                strPoliceNo, BIF.strTransDate(), BIF.huanan_claim_amount(),
+                BIF.huanan_claim_descript(nClaimNo)));
+        
+        listSQL.add(String.format(SqlHandler.SQL_INSURANCE_EXP_DATE, BIF.strID(),
+                strPoliceNo, BIF.huanan_exp_date(), 1));
+        
+        listSQL.add(String.format(SqlHandler.SQL_INSURANCE_RECORD, user_id,
+                strPoliceNo, BIF.huanan_classification(nClaimNo),
+                BIF.huanan_classification(nClaimNo), BIF.huanan_claim_descript(nClaimNo),
+                BIF.huanan_insurance_premiums(), BIF.huanan_insurance_date(),
+                BIF.huanan_exp_date(), m_strCarType));
         
     }
     

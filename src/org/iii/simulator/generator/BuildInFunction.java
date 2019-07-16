@@ -1854,6 +1854,11 @@ public class BuildInFunction
         return String.format("%s-%04d", strId.toString(), random.nextInt(9999));
     }
     
+    public int getClaimNO()
+    {
+        return random.nextInt(5);
+    }
+    
     /*◎強制險：SCF000001~SCF999999
 ◎任意險：SCX000001~SCX999999
 ◎旅綜險：SCT000001~SCT999999
@@ -1861,9 +1866,16 @@ public class BuildInFunction
 ◎個人健康險：SCH000001~SCH999999*/
     private final String[] claimhead = {"SCF", "SCX", "SCT", "SCA", "SCH"};
     
-    public String huanan_claim_no()
+    public String huanan_claim_no(int nClaimNo)
     {
-        return String.format("%s-%06d", claimhead[random.nextInt(5)], random.nextInt(999999));
+        return String.format("%s-%06d", claimhead[nClaimNo], random.nextInt(999999));
+    }
+    
+    private final String[] huanan_classification = {"強制險", "任意險", "旅綜險", "個人傷害險", "個人健康險"};
+    
+    public String huanan_classification(int nClaim)
+    {
+        return huanan_classification[nClaim];
     }
     
     /*◎強制險：SPF000001~SPF999999
@@ -1871,6 +1883,109 @@ public class BuildInFunction
 ◎旅綜險：SPT000001~SPT999999
 ◎個人傷害險：SPA000001~SPA999999
 ◎個人健康險：SPH000001~SPH999999*/
-   // private final String[]
+    private final String[] policy_no = {"SPF", "SPX", "SPT", "SPA", "SPH"};
+    
+    public String huanan_policy_no(int nClaimNo)
+    {
+        return String.format("%s-%06d", policy_no[nClaimNo], random.nextInt(999999));
+    }
+    
+    public int huanan_claim_amount()
+    {
+        return random.nextInt(1018000) + 300;
+    }
+    
+    private final String[] spf = {"駕駛人過失", "駕駛人酗酒", "第三人過失", "整車被竊", "零件被竊", "機械故障煞車失靈", "其他"};
+    private final String[] spx = {"與其他車輛相撞之機動車交通事故", "其他非相撞(自撞)之機動車交通事故", "駕駛人過失", "駕駛人酗酒",
+            "第三人過失", "不明原因停放中被刮損", "不明原因停放中被碰撞", "不明原因其他", "整車被竊", "零件被竊", "被竊尋回修復", "竊盜未遂", "火燒"
+            , "天災－颱風", "其他"};
+    private final String[] spt = {"交通工具延誤", "風災(強風、龍捲風、颱風)", "其他"};
+    private final String[] spa = {"跌倒", "車禍", "被物體或人意外撞擊或擊中", "其他"};
+    private final String[] sph = {"疾病", "車禍", "其他"};
+    
+    public String huanan_claim_descript(int nClaimNo)
+    {
+        String strDesc = "";
+        switch (nClaimNo)
+        {
+            case 0:
+                strDesc = spf[random.nextInt(spf.length)];
+                break;
+            case 1:
+                strDesc = spx[random.nextInt(spx.length)];
+                break;
+            case 2:
+                strDesc = spt[random.nextInt(spt.length)];
+                break;
+            case 3:
+                strDesc = spa[random.nextInt(spa.length)];
+                break;
+            case 4:
+                strDesc = sph[random.nextInt(sph.length)];
+                break;
+        }
+        return strDesc;
+    }
+    
+    public String huanan_exp_date()
+    {
+        String strYear = String.format("%d", (2019 + random.nextInt(5)));
+        int nMonth = random.nextInt(12);
+        if (0 == nMonth)
+        {
+            nMonth = 2;
+        }
+        int nDay;
+        if (2 == nMonth)
+        {
+            nDay = random.nextInt(28);
+        }
+        else
+        {
+            nDay = random.nextInt(30);
+        }
+        if (0 == strYear.compareTo("2019"))
+        {
+            if (4 < nMonth)
+            {
+                nMonth = 4;
+            }
+        }
+        
+        return String.format("%s-%02d-%02d", strYear, nMonth, nDay);
+    }
+    
+    public int huanan_insurance_premiums()
+    {
+        return random.nextInt(2000) + 2000;
+    }
+    
+    public String huanan_insurance_date()
+    {
+        String strYear = String.format("%d", (2016 + random.nextInt(3)));
+        int nMonth = random.nextInt(12);
+        if (0 == nMonth)
+        {
+            nMonth = 2;
+        }
+        int nDay;
+        if (2 == nMonth)
+        {
+            nDay = random.nextInt(28);
+        }
+        else
+        {
+            nDay = random.nextInt(30);
+        }
+        if (0 == strYear.compareTo("2019"))
+        {
+            if (4 < nMonth)
+            {
+                nMonth = 4;
+            }
+        }
+        
+        return String.format("%s-%02d-%02d", strYear, nMonth, nDay);
+    }
     
 }
