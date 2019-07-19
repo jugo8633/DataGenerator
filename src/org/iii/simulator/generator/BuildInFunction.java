@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -381,27 +382,6 @@ public class BuildInFunction
             nIndex = 0;
         }
         return strItemName[nIndex];
-    }
-    
-    public String MultinominalDistribution(ArrayList<MultinomialData> listMD)
-    {
-        String strResult;
-        int nIndex;
-        double[] p = new double[listMD.size()];
-        for (nIndex = 0; nIndex < listMD.size(); ++nIndex)
-        {
-            p[nIndex] = listMD.get(nIndex).probability;
-        }
-        ArrayList result =
-                (ArrayList) new MultinominalDistributionFuncs().multinominalRandomGenerator(1,
-                        p.length, p);
-        nIndex = (int) result.get(0);
-        if (0 > nIndex || listMD.size() <= nIndex)
-        {
-            nIndex = 0;
-        }
-        
-        return listMD.get(nIndex).itemName;
     }
     
     /**
@@ -1986,6 +1966,41 @@ public class BuildInFunction
         }
         
         return String.format("%s-%02d-%02d", strYear, nMonth, nDay);
+    }
+    
+    public String huanan_payments_period(String strInsurenceDate)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try
+        {
+            Date date = sdf.parse(strInsurenceDate);
+            calendar.setTime(date);
+            calendar.add(Calendar.MONTH, -3);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return sdf.format(calendar.getTime());
+    }
+    
+    public int huanan_pay_status()
+    {
+        BinominalDistFuncs binominalDistFuncs = new BinominalDistFuncs(1, 0.95);
+        return binominalDistFuncs.getSample(1)[0];
+    }
+    
+    /*◎信用卡:25.8%
+◎超商繳費:24.9%
+◎匯款:33.2%
+◎現金:4.7%
+◎支票:11.4%*/
+    public String huanan_pay_category()
+    {
+        final double[] P = {0.26, 0.25, 0.33, 0.04, 0.11};
+        final String[] S = {"信用卡", "超商繳費", "匯款", "現金", "支票"};
+        return MultinominalDistribution(P, S);
     }
     
 }

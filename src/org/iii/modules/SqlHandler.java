@@ -90,6 +90,13 @@ public abstract class SqlHandler
     
     public final static String SQL_INSURANCE_RECORD = "INSERT INTO insurance_record(user_id," +
             "policy_no,classification,insurance_category,insurance_name,insurance_premiums," +
-            "insurance_date,insurance_expiration_date,car_type )VALUES(%d,'%s','%s','%s','%s',%d," +
-            "'%s','%s','%s')";
+            "insurance_date,insurance_expiration_date,car_type )VALUES(%d,'%s','%s','%s','%s',%d,"
+            + "'%s','%s','%s')";
+    
+    public final static String SQL_ONLINE_REPORT = "INSERT INTO online_report(policy_no," +
+            "identity_id,license_no,claim_date )VALUES('%s','%s','%s','%s')";
+    
+    public final static String SQL_PAYMENT_METHOD = "INSERT INTO payment_method(user_id," +
+            "policy_no,pay_status,pay_date,pay_category,payments_period )VALUES(%d,'%s',%d,'%s'," +
+            "'%s','%s')";
 }
