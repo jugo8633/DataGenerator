@@ -211,11 +211,13 @@ class HuananDataGenerator
         
         listSQL.clear();
         strUUID = BIF.strUUID(1);
-        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, nSerial,
-                BIF.strBirthday(1), BIF.strGender(), BIF.strJobHuanan(), BIF.strResidence(),
-                BIF.strIncome(), BIF.strService_units(), BIF.strMarital(), BIF.strEducation(),
-                BIF.dependents(), BIF.strCredit_level(), BIF.is_SNY(), BIF.is_register_web_bank()
-                , BIF.is_app_bank(), BIF.is_register_mobile_pay());
+        identity_id = BIF.strID();
+        license_no = BIF.strCarId();
+        strSQL = String.format(SqlHandler.SQL_HUANAN_BANK_ACCOUNT, strUUID, nSerial, identity_id,
+                license_no, BIF.strBirthday(1), BIF.strGender(), BIF.strJobHuanan(),
+                BIF.strResidence(), BIF.strIncome(), BIF.strService_units(), BIF.strMarital(),
+                BIF.strEducation(), BIF.dependents(), BIF.strCredit_level(), BIF.is_SNY(),
+                BIF.is_register_web_bank(), BIF.is_app_bank(), BIF.is_register_mobile_pay());
         if (-1 == runSQL(strSQL))
         {
             System.out.println("Error Exec SQL: " + strSQL);
@@ -231,8 +233,6 @@ class HuananDataGenerator
         
         strFundCode = BIF.huanan_fund_code();
         strAccountNum = BIF.strAccountNumber();
-        identity_id = BIF.strID();
-        license_no = BIF.strCarId();
         nClaimNo = BIF.getClaimNO();
         strPoliceNo = BIF.huanan_policy_no(nClaimNo);
         claim_date = BIF.strTransDate();
@@ -273,7 +273,7 @@ class HuananDataGenerator
         
         listSQL.add(String.format(SqlHandler.SQL_BENEFICIARY, user_id, BIF.huanan_benefit_id(),
                 BIF.strChineseName(), BIF.strBirthday(1), BIF.huanan_risk(), claim_date));
-    
+        
         if (COUNT_BLACKLIST > m_nCount)
         {
             listSQL.add(String.format(SqlHandler.SQL_BLACK_LIST, identity_id, license_no));

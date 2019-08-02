@@ -43,8 +43,10 @@ public abstract class SqlHandler
     
     //===================  華南 API ======================//
     public final static String SQL_HUANAN_BANK_ACCOUNT = "INSERT INTO bank_account(uuid," +
-            "serial,birthday," + "gender,career, residence, income, service_units, marital, " +
-            "education,dependents," + "credit_level, is_SNY, is_register_web_bank,is_app_bank," + "is_register_mobile_pay ) " + "VALUES('%s',%d,'%s','%s','%s','%s',%s,'%s','%s','%s'," + "%d,'%s',%d,%d,%d,%d);";
+            "serial,identity_id,license_no,birthday," + "gender,career, residence, income, " +
+            "service_units, " +
+            "marital, " +
+            "education,dependents," + "credit_level, is_SNY, is_register_web_bank,is_app_bank," + "is_register_mobile_pay ) " + "VALUES('%s',%d,'%s','%s','%s','%s','%s','%s',%s,'%s','%s','%s'," + "%d,'%s',%d,%d,%d,%d);";
     
     public final static String SQL_BANK_ACCOUNT_ID =
             "SELECT id FROM bank_account WHERE uuid = " + "'%s';";
